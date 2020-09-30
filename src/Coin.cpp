@@ -59,79 +59,95 @@ using namespace TW;
 using namespace std;
 
 // Map with coin entry dispatchers, key is coin type
-map<TWCoinType, CoinEntry*> dispatchMap = {}; 
-mutex dispatchMapMutex;
+map<TWCoinType, CoinEntry*> dispatchMap = {};
 // List of supported coint types
 set<TWCoinType> coinTypes = {};
 
-void setupDispatchers() {
-    std::vector<CoinEntry*> dispatchers = {
-        new Aeternity::Entry(),
-        new Aion::Entry(),
-        new Algorand::Entry(),
-        new Binance::Entry(),
-        new Bitcoin::Entry(),
-        new Cardano::Entry(),
-        new Cosmos::Entry(),
-        new EOS::Entry(),
-        new Ethereum::Entry(),
-        new Decred::Entry(),
-        new Filecoin::Entry(),
-        new FIO::Entry(),
-        new Groestlcoin::Entry(),
-        new Harmony::Entry(),
-        new Icon::Entry(),
-        new IoTeX::Entry(),
-        new Kusama::Entry(),
-        new Nano::Entry(),
-        new NEAR::Entry(),
-        new Nebulas::Entry(),
-        new NEO::Entry(),
-        new Nimiq::Entry(),
-        new NULS::Entry(),
-        new Ontology::Entry(),
-        new Polkadot::Entry(),
-        new Ripple::Entry(),
-        new Solana::Entry(),
-        new Stellar::Entry(),
-        new Tezos::Entry(),
-        new Theta::Entry(),
-        new TON::Entry(),
-        new Tron::Entry(),
-        new VeChain::Entry(),
-        new Wanchain::Entry(),
-        new Waves::Entry(),
-        new Zcash::Entry(),
-        new Zilliqa::Entry(),
-        new Elrond::Entry(),
-    }; // end_of_coin_entries_marker_do_not_modify
+// Static-initialized map of coinTypes-dispatchers.
+// Note that one dispatcher can serve multiple coins.  Sorted by dispatchers.
+map<TWCoinType, CoinEntry*> getStaticDispatchMap() {
+    return map<TWCoinType, CoinEntry*>{
+        {TWCoinTypeAeternity, new Aeternity::Entry()},
+        {TWCoinTypeAion, new Aion::Entry()},
+        {TWCoinTypeAlgorand, new Algorand::Entry()},
+        {TWCoinTypeBinance, new Binance::Entry()},
+        {TWCoinTypeBitcoin, new Bitcoin::Entry()},
+        {TWCoinTypeBitcoinCash, new Bitcoin::Entry()},
+        {TWCoinTypeBitcoinGold, new Bitcoin::Entry()},
+        {TWCoinTypeDash, new Bitcoin::Entry()},
+        {TWCoinTypeDigiByte, new Bitcoin::Entry()},
+        {TWCoinTypeDogecoin, new Bitcoin::Entry()},
+        {TWCoinTypeLitecoin, new Bitcoin::Entry()},
+        {TWCoinTypeMonacoin, new Bitcoin::Entry()},
+        {TWCoinTypeQtum, new Bitcoin::Entry()},
+        {TWCoinTypeRavencoin, new Bitcoin::Entry()},
+        {TWCoinTypeViacoin, new Bitcoin::Entry()},
+        {TWCoinTypeZcoin, new Bitcoin::Entry()},
+        {TWCoinTypeCardano, new Cardano::Entry()},
+        {TWCoinTypeCosmos, new Cosmos::Entry()},
+        {TWCoinTypeKava, new Cosmos::Entry()},
+        {TWCoinTypeTerra, new Cosmos::Entry()},
+        {TWCoinTypeBandChain, new Cosmos::Entry()},
+        {TWCoinTypeEOS, new EOS::Entry()},
+        {TWCoinTypeCallisto, new Ethereum::Entry()},
+        {TWCoinTypeEthereum, new Ethereum::Entry()},
+        {TWCoinTypeEthereumClassic, new Ethereum::Entry()},
+        {TWCoinTypeGoChain, new Ethereum::Entry()},
+        {TWCoinTypePOANetwork, new Ethereum::Entry()},
+        {TWCoinTypeThunderToken, new Ethereum::Entry()},
+        {TWCoinTypeTomoChain, new Ethereum::Entry()},
+        {TWCoinTypeSmartChainLegacy, new Ethereum::Entry()},
+        {TWCoinTypeSmartChain, new Ethereum::Entry()},
+        {TWCoinTypeDecred, new Decred::Entry()},
+        {TWCoinTypeFilecoin, new Filecoin::Entry()},
+        {TWCoinTypeFIO, new FIO::Entry()},
+        {TWCoinTypeGroestlcoin, new Groestlcoin::Entry()},
+        {TWCoinTypeHarmony, new Harmony::Entry()},
+        {TWCoinTypeICON, new Icon::Entry()},
+        {TWCoinTypeIoTeX, new IoTeX::Entry()},
+        {TWCoinTypeKusama, new Kusama::Entry()},
+        {TWCoinTypeNano, new Nano::Entry()},
+        {TWCoinTypeNEAR, new NEAR::Entry()},
+        {TWCoinTypeNebulas, new Nebulas::Entry()},
+        {TWCoinTypeNEO, new NEO::Entry()},
+        {TWCoinTypeNimiq, new Nimiq::Entry()},
+        {TWCoinTypeNULS, new NULS::Entry()},
+        {TWCoinTypeOntology, new Ontology::Entry()},
+        {TWCoinTypePolkadot, new Polkadot::Entry()},
+        {TWCoinTypeXRP, new Ripple::Entry()},
+        {TWCoinTypeSolana, new Solana::Entry()},
+        {TWCoinTypeStellar, new Stellar::Entry()},
+        {TWCoinTypeKin, new Stellar::Entry()},
+        {TWCoinTypeTezos, new Tezos::Entry()},
+        {TWCoinTypeTheta, new Theta::Entry()},
+        {TWCoinTypeTON, new TON::Entry()},
+        {TWCoinTypeTron, new Tron::Entry()},
+        {TWCoinTypeVeChain, new VeChain::Entry()},
+        {TWCoinTypeWanchain, new Wanchain::Entry()},
+        {TWCoinTypeWaves, new Waves::Entry()},
+        {TWCoinTypeZcash, new Zcash::Entry()},
+        {TWCoinTypeZelcash, new Zcash::Entry()},
+        {TWCoinTypeZilliqa, new Zilliqa::Entry()},
+        {TWCoinTypeElrond, new Elrond::Entry()},
+    };
+}
 
-    lock_guard<mutex> guard(dispatchMapMutex);
-    if (dispatchMap.size() > 0) {
-        // already set up, skip
-        return;
-    }
-    dispatchMap.clear();
+void setupDispatchers() {
+
+    dispatchMap = getStaticDispatchMap();
     coinTypes.clear();
-    for (auto d : dispatchers) {
-        auto dispCoins = d->coinTypes();
-        for (auto c : dispCoins) {
-            assert(dispatchMap.find(c) == dispatchMap.end()); // each coin must appear only once
-            dispatchMap[c] = d;
-            if (coinTypes.emplace(c).second != true) {
-                // each coin must appear only once
-                abort();
-            };
-        }
+    for (auto d: dispatchMap) {
+        coinTypes.emplace(d.first);
     }
     // Note: dispatchers are created at first use, and never freed
 }
 
 inline void setupDispatchersIfNeeded() {
-    if (dispatchMap.size() == 0) {
+    if (dispatchMap.size() == 0 || coinTypes.size() == 0) {
         setupDispatchers();
     }
     assert(dispatchMap.size() > 0);
+    assert(coinTypes.size() > 0);
     // it is set up by this time, and will not get modified
 }
 
