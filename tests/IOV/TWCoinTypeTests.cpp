@@ -15,10 +15,10 @@
 
 TEST(TWIOVCoinType, TWCoinType) {
     auto symbol = WRAPS(TWCoinTypeConfigurationGetSymbol(TWCoinTypeIOV));
-    auto txId = TWStringCreateWithUTF8Bytes("5E189F10BE129169096096B6AD39547631780E31089B1C56C1DB35C92FD39801");
-    auto txUrl = WRAPS(TWCoinTypeConfigurationGetTransactionURL(TWCoinTypeIOV, txId));
-    auto accId = TWStringCreateWithUTF8Bytes("star1mj92w3zhd89znd26qq6yarpr86yc573khrm0hv");
-    auto accUrl = WRAPS(TWCoinTypeConfigurationGetAccountURL(TWCoinTypeIOV, accId));
+    auto txId = WRAPS(TWStringCreateWithUTF8Bytes("5E189F10BE129169096096B6AD39547631780E31089B1C56C1DB35C92FD39801"));
+    auto txUrl = WRAPS(TWCoinTypeConfigurationGetTransactionURL(TWCoinTypeIOV, txId.get()));
+    auto accId = WRAPS(TWStringCreateWithUTF8Bytes("star1mj92w3zhd89znd26qq6yarpr86yc573khrm0hv"));
+    auto accUrl = WRAPS(TWCoinTypeConfigurationGetAccountURL(TWCoinTypeIOV, accId.get()));
     auto id = WRAPS(TWCoinTypeConfigurationGetID(TWCoinTypeIOV));
     auto name = WRAPS(TWCoinTypeConfigurationGetName(TWCoinTypeIOV));
 
