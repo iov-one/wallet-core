@@ -4,7 +4,7 @@
 // terms governing use, modification, and redistribution, is contained in the
 // file LICENSE at the root of the source code distribution tree.
 
-import TrustWalletCore
+import WalletCore
 import XCTest
 
 extension HDWallet {
@@ -419,5 +419,12 @@ class HDWalletTests: XCTestCase {
         let address = coin.deriveAddress(privateKey: key)
 
         XCTAssertEqual(address, "band1pe8xm2r46rmctsukuqu7gl900vzprfsp4sguc3")
+    }
+    func testDeriveIOV() {
+        let coin = CoinType.iov
+        let key = HDWallet.test.getKeyForCoin(coin: coin)
+        let address = coin.deriveAddress(privateKey: key)
+
+        XCTAssertEqual(address, "star1lkc0te63v2epfgwlm0u0vejcqsshm83w7h7ch6")
     }
 }
