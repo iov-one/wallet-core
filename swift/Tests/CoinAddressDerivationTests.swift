@@ -97,6 +97,9 @@ class CoinAddressDerivationTests: XCTestCase {
                 case .ioTeX:
                     let expectedResult = "io1qw9cccecw09q7p5kzyqtuhfhvah2mhfrc84jfk"
                     assertCoinDerivation(coin, expectedResult, derivedAddress, address)
+                case .iov:
+                    let expectedResult = "star1vx5uwgjzrmdmt0evmgaxmejnzplkuhqs8kqt4m"
+                    assertCoinDerivation(coin, expectedResult, derivedAddress, address)
                 case .litecoin:
                     let expectedResult = "ltc1qhd8fxxp2dx3vsmpac43z6ev0kllm4n53t5sk0u"
                     assertCoinDerivation(coin, expectedResult, derivedAddress, address)
@@ -201,9 +204,6 @@ class CoinAddressDerivationTests: XCTestCase {
                     assertCoinDerivation(coin, expectedResult, derivedAddress, address)
                 case .smartChainLegacy:
                     let expectedResult = "0x49784f90176D8D9d4A3feCDE7C1373dAAb5b13b8"
-                    assertCoinDerivation(coin, expectedResult, derivedAddress, address)
-                case .iov:
-                    let expectedResult = "star1vx5uwgjzrmdmt0evmgaxmejnzplkuhqs8kqt4m"
                     assertCoinDerivation(coin, expectedResult, derivedAddress, address)
                 @unknown default:
                     fatalError()

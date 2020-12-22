@@ -32,4 +32,3 @@ TEST(TWIOVCoinType, TWCoinType) {
     assertStringsEqual(id, "iov");
     assertStringsEqual(name, "IOV");
 }
-
