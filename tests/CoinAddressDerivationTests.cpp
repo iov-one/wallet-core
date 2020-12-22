@@ -18,7 +18,7 @@ TEST(Coin, DeriveAddress) {
     auto dummyKeyData = parse_hex("0x4646464646464646464646464646464646464646464646464646464646464646");
     const auto privateKey = PrivateKey(dummyKeyData);
     const auto privateKeyExt = PrivateKey(dummyKeyData, dummyKeyData, dummyKeyData);
-    
+
     EXPECT_EQ(TW::deriveAddress(TWCoinTypeAion, privateKey), "0xa0010b0ea04ba4d76ca6e5e9900bacf19bc4402eaec7e36ea7ddd8eed48f60f3");
     EXPECT_EQ(TW::deriveAddress(TWCoinTypeBinance, privateKey), "bnb1hkfq3zahaqkkzx5mjnamwjsfpq2jk7z0mlq0d0");
     EXPECT_EQ(TW::deriveAddress(TWCoinTypeBitcoin, privateKey), "bc1qhkfq3zahaqkkzx5mjnamwjsfpq2jk7z00ppggv");
@@ -75,6 +75,7 @@ TEST(Coin, DeriveAddress) {
     EXPECT_EQ(TW::deriveAddress(TWCoinTypeNEAR, privateKey), "ee93a4f66f8d16b819bb9beb9ffccdfcdc1412e87fee6a324c2a99a1e0e67148");
     EXPECT_EQ(TW::deriveAddress(TWCoinTypeSolana, privateKey), "H4JcMPicKkHcxxDjkyyrLoQj7Kcibd9t815ak4UvTr9M");
     EXPECT_EQ(TW::deriveAddress(TWCoinTypeElrond, privateKey), "erd1a6f6fan035ttsxdmn04ellxdlnwpgyhg0lhx5vjv92v6rc8xw9yq83344f");
+    EXPECT_EQ(TW::deriveAddress(TWCoinTypeIOV, privateKey), "star1hkfq3zahaqkkzx5mjnamwjsfpq2jk7z0cp32md");
 }
 
 int countThreadReady = 0;
