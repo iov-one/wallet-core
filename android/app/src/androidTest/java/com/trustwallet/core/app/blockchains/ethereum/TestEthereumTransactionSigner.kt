@@ -59,7 +59,7 @@ class TestEthereumTransactionSigner {
             transaction = Ethereum.Transaction.newBuilder().apply {
                 erc20Transfer = Ethereum.Transaction.ERC20Transfer.newBuilder().apply {
                     to = "0x5322b34c88ed0691971bf52a7047448f0f4efc84"
-                    amount = ByteString.copyFrom("0x1bc16d674ec80000".toHexByteArray())       
+                    amount = ByteString.copyFrom("0x1bc16d674ec80000".toHexByteArray())
                 }.build()
             }.build()
         }
@@ -115,7 +115,7 @@ class TestEthereumTransactionSigner {
                     "transfer": {
                         "amount":"A0i8paFgAA=="
                     }
-                }                
+                }
             }
         """
         val key = "17209af590a86462395d5881e60d11c7fa7d482cfb02b5a01b93c2eeef243543".toHexByteArray()

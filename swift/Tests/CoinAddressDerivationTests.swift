@@ -97,6 +97,9 @@ class CoinAddressDerivationTests: XCTestCase {
                 case .ioTeX:
                     let expectedResult = "io1qw9cccecw09q7p5kzyqtuhfhvah2mhfrc84jfk"
                     assertCoinDerivation(coin, expectedResult, derivedAddress, address)
+                case .iov:
+                    let expectedResult = "star1vx5uwgjzrmdmt0evmgaxmejnzplkuhqs8kqt4m"
+                    assertCoinDerivation(coin, expectedResult, derivedAddress, address)
                 case .litecoin:
                     let expectedResult = "ltc1qhd8fxxp2dx3vsmpac43z6ev0kllm4n53t5sk0u"
                     assertCoinDerivation(coin, expectedResult, derivedAddress, address)
